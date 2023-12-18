@@ -12,7 +12,6 @@ scene_player = {
             muzzle_size = 0,
 
             spr = 2,
-            flame_anim = anim.make("5,6,7,8,9"),
 
             -- flame
             flame_parts = {},
@@ -78,7 +77,6 @@ scene_player = {
 
                 if self.invuln_delay <= 0 or sin(time() / 0.5) < 0.2 then
                     spr(self.spr, self.pos.x, self.pos.y)
-                    -- spr(anim.next(self.flame_anim), self.pos.x, self.pos.y + 8)
                 end
                 self.spr = 2
 

@@ -14,8 +14,8 @@ _g = {
     update_before = function(self)
         local state_events = self.events[self.state]
         if self.state != self.state_prev then
-            self.state_prev = self.state
             state_events.before_update(self)
+            self.state_prev = self.state
         end
     end
 }

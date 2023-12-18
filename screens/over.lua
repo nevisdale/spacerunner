@@ -14,12 +14,15 @@ scene_over = {
 
         if (btn(4) or btn(5)) and g.release_button then
             scene_game.reset(g)
+            scene_levels.reset(g)
             g.state = "levels"
         end
     end,
 
     draw = function(g)
         cls(0)
+
+        print("over screen")
 
         g.bg:draw()
 

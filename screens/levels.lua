@@ -7,12 +7,16 @@ scene_levels = {
         end
     end,
 
-    init = function(g)
-        g.levels_colors = split("7,7,6,6,6,5,5,5")
+    reset = function(g)
         g.level_delay = 60
         g.level_num = conf.start_level or 1
         g.level = nil
         g.level_to_init = nil
+    end,
+
+    init = function(g)
+        g.levels_colors = split("7,7,6,6,6,5,5,5")
+        scene_levels.reset(g)
     end,
 
     before_update = function(g)
@@ -32,6 +36,7 @@ scene_levels = {
         end
 
         if g.level_to_init == nil then
+            g.bg:move_slower()
             g.state = "win"
             return
         end

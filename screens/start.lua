@@ -16,12 +16,15 @@ scene_start = {
         end
 
         if (btn(4) or btn(5)) and g.release_button then
+            scene_levels.reset(g)
             g.state = "levels"
         end
     end,
 
     draw = function(g)
         cls(0)
+
+        print("start screen")
 
         g.bg:draw()
         for i, sprite in ipairs(g.title_sprs) do

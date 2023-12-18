@@ -86,6 +86,14 @@ scene_player = {
                     self.muzzle_size -= 1
                 end
 
+                local get_flame_color = function(ttl)
+                    local flame_color = 7
+                    if ttl <= 5 then flame_color = 9 end
+                    if ttl <= 2 then flame_color = 8 end
+                    if ttl <= 1 then flame_color = 5 end
+                    return flame_color
+                end
+
                 foreach(
                     self.flame_parts, function(part)
                         part.ttl -= 1
@@ -94,17 +102,7 @@ scene_player = {
                             del(self.flame_parts, part)
                             return
                         end
-                        local flame_color = 7
-                        if part.ttl <= 5 then
-                            flame_color = 9
-                        end
-                        if part.ttl <= 2 then
-                            flame_color = 8
-                        end
-                        if part.ttl <= 1 then
-                            flame_color = 5
-                        end
-                        circfill(part.pos.x, part.pos.y, part.size, flame_color)
+                        circfill(part.pos.x, part.pos.y, part.size, get_flame_color(part.ttl))
                         part.pos += part.spd
                     end
                 )

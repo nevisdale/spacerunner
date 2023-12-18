@@ -34,6 +34,13 @@ scene_game = {
             end)
         end
 
+        -- if there are many enemies bullets
+        if btn(4) then
+            player.spd = 1
+        else
+            player.spd = 2
+        end
+
         -- collision: enemies x player
         collutils.responsd_seq(
             g.enemies, player,

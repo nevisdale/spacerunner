@@ -13,7 +13,7 @@ __lua__
 #include screens/over.lua
 
 -- levels
-#include levels/level1.lua
+#include levels/levels.lua
 
 -- entities
 #include player/player.lua

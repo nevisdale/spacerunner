@@ -1,9 +1,9 @@
 scene_levels = {
     get_level = function(num)
         if num == 1 then
-            return level1
+            return level1.new()
         elseif num == 2 then
-            return level2
+            return level2.new()
         end
     end,
 

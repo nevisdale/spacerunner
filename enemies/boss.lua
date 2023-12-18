@@ -5,7 +5,7 @@ scene_enemy_boss = {
 
             coll_shape = function(self)
                 return collutils.make_shape_rect(
-                    self.base.pos + vec2d.new(2, 4),
+                    self.pos + vec2d.new(2, 4),
                     15, 15
                 )
             end,

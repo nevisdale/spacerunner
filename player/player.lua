@@ -14,6 +14,9 @@ scene_player = {
             spr = 2,
             flame_anim = anim.make("5,6,7,8,9"),
 
+            -- flame
+            flame_parts = {},
+
 
             coll_shape = function(self)
                 return collutils.make_shape_rect(self.pos, 7, 7)
@@ -57,6 +60,15 @@ scene_player = {
                 self.invuln_delay = max(self.invuln_delay - 1, 0)
                 self.pos.x = mid(0, self.pos.x, 120)
                 self.pos.y = mid(0, self.pos.y, 113)
+
+                add(
+                    self.flame_parts, {
+                        pos = self.pos + vec2d.new(4 + 0.5 - rnd(), 9),
+                        spd = vec2d.new(2 * (rnd() - 0.5), 1),
+                        ttl = 7,
+                        size = 1
+                    }
+                )
             end,
 
             draw = function(self)
@@ -66,7 +78,7 @@ scene_player = {
 
                 if self.invuln_delay <= 0 or sin(time() / 0.5) < 0.2 then
                     spr(self.spr, self.pos.x, self.pos.y)
-                    spr(anim.next(self.flame_anim), self.pos.x, self.pos.y + 8)
+                    -- spr(anim.next(self.flame_anim), self.pos.x, self.pos.y + 8)
                 end
                 self.spr = 2
 
@@ -75,6 +87,29 @@ scene_player = {
                     circfill(self.pos.x + 4, self.pos.y, self.muzzle_size, 7)
                     self.muzzle_size -= 1
                 end
+
+                foreach(
+                    self.flame_parts, function(part)
+                        part.ttl -= 1
+                        part.size *= 1.1
+                        if part.ttl <= 0 then
+                            del(self.flame_parts, part)
+                            return
+                        end
+                        local flame_color = 7
+                        if part.ttl <= 5 then
+                            flame_color = 9
+                        end
+                        if part.ttl <= 2 then
+                            flame_color = 8
+                        end
+                        if part.ttl <= 1 then
+                            flame_color = 5
+                        end
+                        circfill(part.pos.x, part.pos.y, part.size, flame_color)
+                        part.pos += part.spd
+                    end
+                )
             end
         }
     end

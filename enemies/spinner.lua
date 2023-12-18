@@ -4,7 +4,7 @@ scene_enemy_spinner = {
             base = scene_enemy_base.make(pos, target, hp, anim.make("184,185,186,187", 0.5), 10),
 
             coll_shape = function(self)
-                return collutils.make_shape_rect(self.base.pos, 7, 7)
+                return collutils.make_shape_rect(self.pos, 7, 7)
             end,
 
             take_damage = function(self, n)

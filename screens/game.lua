@@ -51,7 +51,7 @@ scene_game = {
         collutils.responsd_2seq(
             g.enemies, player_bullets,
             function(enemy, bullet)
-                local spark_pos = enemy.base.pos + vec2d.new(4, 0)
+                local spark_pos = enemy.pos + vec2d.new(4, 0)
                 local spark = scene_particals.new_spark(spark_pos)
                 add(g.particals, spark)
                 local wave_pos = bullet.pos + vec2d.new(4, 0)
@@ -61,7 +61,7 @@ scene_game = {
                 del(player_bullets, bullet)
                 sfx(3)
                 if enemy:is_dead() then
-                    local expl_pos = enemy.base.pos + vec2d.new(4, 0)
+                    local expl_pos = enemy.pos + vec2d.new(4, 0)
                     local enemy_expl = scene_particals.new_explosion(expl_pos, 1)
                     add(g.particals, enemy_expl)
                     g.score += 10
@@ -135,12 +135,6 @@ scene_game = {
                 sprite = 29
             end
             spr(sprite, 85 + i * 9 - 8, 1)
-        end
-
-        local en = g.enemies[1]
-        if en != nil and en.pos != nil then
-            local pos = en.base.pos
-            print("pos:(" .. pos.x .. "," .. pos.y .. ")")
         end
     end,
 

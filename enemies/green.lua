@@ -4,7 +4,7 @@ scene_enemy_green = {
             base = scene_enemy_base.make(pos, target, 3, anim.make("21,22,23,24", 0.5), 10),
 
             coll_shape = function(self)
-                return collutils.make_shape_rect(self.base.pos, 7, 7)
+                return collutils.make_shape_rect(self.pos, 7, 7)
             end,
 
             take_damage = function(self, n)

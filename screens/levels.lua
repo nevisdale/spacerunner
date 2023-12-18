@@ -4,6 +4,8 @@ scene_levels = {
             return level1.new()
         elseif num == 2 then
             return level2.new()
+        elseif num == 3 then
+            return level3.new()
         end
     end,
 

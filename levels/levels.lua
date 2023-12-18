@@ -54,3 +54,16 @@ level2 = {
         return level_template.new_from_map(map)
     end
 }
+
+level3 = {
+    new = function()
+        local map = {
+            { 1, 1, 1, 1, 1, 1, 1, 1, nil, 1 },
+            nil, nil,
+            { 1, nil, 1, 1, 1, 1, 1, 1, 1, 1 },
+            nil, nil,
+            { 1, 1, 1, 1, 1, 1, 1, 1, nil, 1 }
+        }
+        return level_template.new_from_map(map)
+    end
+}

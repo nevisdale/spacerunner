@@ -18,7 +18,7 @@ level_template = {
                             shift = -shift
                         end
                         posx += shift
-                        local enemy = scene_enemy_green.new(
+                        local enemy = scene_enemy.new_green(
                             vec2d.new(posx, -64),
                             vec2d.new(i * 12 - 6, 2 + y * 12)
                         )
@@ -32,37 +32,36 @@ level_template = {
             end,
 
             update = function(self, g)
-                if time() % 3 != 0 then
+                for enemy in all(g.enemies) do
+                    enemy.player_pos = g.player.pos
+                end
+
+                if time() % 0.5 != 0 then
                     return
                 end
 
                 local to_attac = {}
-                foreach(
-                    g.enemies, function(enemy)
-                        if enemy.mission != "protec" then
-                            return
-                        end
-                        local need_to_add = false
-                        foreach(
-                            to_attac, function(valid_enemy)
-                                if need_to_add then
-                                    return
-                                end
-                                if valid_enemy.pos.x == enemy.pos.x then
-                                    if valid_enemy.pos.y < enemy.pos.y then
-                                        need_to_add = true
-                                        del(to_attac, valid_enemy)
-                                    end
-                                else
-                                    need_to_add = true
-                                end
+                for enemy in all(g.enemies) do
+                    if enemy.mission != "protec" then
+                        goto continue
+                    end
+
+                    local need_to_add = true
+                    for candidate in all(to_attac) do
+                        if abs(candidate.pos.x - enemy.pos.x) < 4 then
+                            if candidate.pos.y < enemy.pos.y then
+                                del(to_attac, candidate)
+                            else
+                                need_to_add = false
                             end
-                        )
-                        if need_to_add or #to_attac == 0 then
-                            add(to_attac, enemy)
                         end
                     end
-                )
+                    if need_to_add then
+                        add(to_attac, enemy)
+                    end
+
+                    ::continue::
+                end
 
                 local enemy_to_attac = rnd(to_attac)
                 if enemy_to_attac == nil then
@@ -73,7 +72,7 @@ level_template = {
             end,
 
             is_done = function(self, g)
-                return #g.enemies == 0
+                return #g.enemies == 0 and #g.enemy_bullets == 0
             end
         }
     end
@@ -83,8 +82,8 @@ level1 = {
     new = function()
         local map = {
             { 0, 1, 0, 0, 1, 1, 0, 0, 1, 0 },
-            { 1, 0, 0, 1, 1, 1, 1, 0, 0, 1 },
-            { 1, 0, 0, 1, 1, 1, 1, 0, 0, 1 }
+            { 0, 0, 0, 1, 1, 1, 1, 0, 0, 0 },
+            { 0, 0, 0, 1, 1, 1, 1, 0, 0, 0 }
         }
         return level_template.new_from_map(map)
     end

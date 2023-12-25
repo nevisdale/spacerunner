@@ -33,7 +33,7 @@ collutils = {
         return true
     end,
 
-    responsd_seq = function(seq, one, responsd)
+    responsd_nx1 = function(seq, one, responsd)
         for s in all(seq) do
             if collutils.detect(s, one) then
                 responsd(s, one)
@@ -41,7 +41,7 @@ collutils = {
         end
     end,
 
-    responsd_2seq = function(seq1, seq2, responsd)
+    responsd_nxn = function(seq1, seq2, responsd)
         for s1 in all(seq1) do
             for s2 in all(seq2) do
                 if collutils.detect(s1, s2) then

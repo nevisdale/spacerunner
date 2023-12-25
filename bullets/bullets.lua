@@ -41,6 +41,19 @@ scene_enemy_bullet = {
         local bullet = scene_bullet.new(pos, spd, anim.make("18"))
         bullet.lt_pos = vec2d.new(1, 1)
         bullet.rb_pos = vec2d.new(3, 3)
+
+        origin_draw = bullet.draw
+
+        bullet.draw = function(self)
+            if time() % 0.5 == 0 then
+                for i = 0, 15 do
+                    pal(i, 7)
+                end
+            end
+            origin_draw(self)
+            pal()
+        end
+
         return bullet
     end
 }

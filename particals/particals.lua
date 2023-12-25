@@ -1,41 +1,4 @@
-scene_particals = {
-    new_spark = function(pos)
-        return {
-            pos = pos,
-            spd = vec2d.new(
-                (rnd() - 0.5) * 4,
-                (rnd() - 1) * 4
-            ),
-            age = 0,
-            max_age = 5,
-
-            is_active = true,
-
-            draw = function(self)
-                if self.age > self.max_age then
-                    self.is_active = false
-                    return
-                end
-                self.age += 1
-
-                pset(self.pos.x, self.pos.y, 7)
-                self.pos += self.spd
-            end
-        }
-    end,
-
-
-    draw = function(particals)
-        foreach(
-            particals, function(part)
-                part:draw()
-                if not part.is_active then
-                    del(particals, part)
-                end
-            end
-        )
-    end
-}
+scene_particals = {}
 
 scene_particals.new_spark = function(pos)
     return {

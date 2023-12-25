@@ -18,12 +18,7 @@ __lua__
 -- entities
 #include player/player.lua
 #include bullets/bullets.lua
-#include enemies/base.lua
-#include enemies/builder.lua
-#include enemies/green.lua
-#include enemies/red.lua
-#include enemies/spinner.lua
-#include enemies/boss.lua
+#include enemies/enemies.lua
 
 -- other
 #include background/starfield.lua

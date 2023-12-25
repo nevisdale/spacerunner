@@ -1,5 +1,9 @@
 scene_game = {
     reset = function(g)
+        for bullet in all(scene_enemy_bullets) do
+            del(scene_enemy_bullets, bullet)
+        end
+
         g.player = scene_player.new(vec2d.new(64, 64), 2, 3)
         g.player_bullets = {}
         g.enemies = {}
@@ -36,7 +40,7 @@ scene_game = {
         end
 
         -- collision: enemies x player
-        collutils.responsd_seq(
+        collutils.responsd_nx1(
             g.enemies, player,
             function(enemy, player)
                 if player:take_damage(1) then
@@ -49,13 +53,11 @@ scene_game = {
         )
 
         -- collision: enemy bullets x player
-        collutils.responsd_seq(
+        collutils.responsd_nx1(
             g.enemy_bullets, player,
             function(bullet, player)
                 if player:take_damage(1) then
-                    local expl_pos = player.pos:copy()
-                    local player_expl = scene_particals.new_explosion(expl_pos, 2)
-                    add(g.particals, player_expl)
+                    add(g.particals, scene_particals.new_explosion(player.pos:copy(), 2))
                     sfx(1)
                     del(g.enemy_bullets, bullet)
                 end
@@ -63,24 +65,17 @@ scene_game = {
         )
 
         -- collision: enemies x player bullets
-        collutils.responsd_2seq(
+        collutils.responsd_nxn(
             g.enemies, player_bullets,
             function(enemy, bullet)
-                local spark_pos = enemy.pos + vec2d.new(4, 0)
-                local spark = scene_particals.new_spark(spark_pos)
-                add(g.particals, spark)
-                local wave_pos = bullet.pos + vec2d.new(4, 0)
-                local wave = scene_particals.new_wave(wave_pos)
-                add(g.particals, wave)
                 enemy:take_damage(1)
                 del(player_bullets, bullet)
+                add(g.particals, scene_particals.new_spark(enemy.pos + vec2d.new(4, 0)))
+                add(g.particals, scene_particals.new_wave(bullet.pos + vec2d.new(4, 0)))
                 sfx(3)
                 if enemy:is_dead() then
-                    local expl_pos = enemy.pos + vec2d.new(4, 0)
-                    local enemy_expl = scene_particals.new_explosion(expl_pos, 1)
-                    add(g.particals, enemy_expl)
                     g.score += 10
-                    del(g.enemies, enemy)
+                    add(g.particals, scene_particals.new_explosion(enemy.pos + vec2d.new(4, 0), 1))
                     sfx(2)
                 end
             end
@@ -93,25 +88,20 @@ scene_game = {
             end
         end
 
-        foreach(
-            g.enemy_bullets, function(bullet)
-                bullet:update()
-                if not bullet.is_active then
-                    del(g.enemy_bullets, bullet)
-                end
+        for bullet in all(g.enemy_bullets) do
+            bullet:update()
+            if not bullet.is_active then
+                del(g.enemy_bullets, bullet)
             end
-        )
+        end
 
-        foreach(
-            player_bullets, function(bullet)
-                bullet:update()
-                if not bullet.is_active then
-                    del(player_bullets, bullet)
-                end
+        for bullet in all(player_bullets) do
+            bullet:update()
+            if not bullet.is_active then
+                del(player_bullets, bullet)
             end
-        )
+        end
 
-        -- CHANGE SCEREEN
         if player:is_dead() then
             g.state = "over"
             return
@@ -123,8 +113,6 @@ scene_game = {
                 g.state = "levels"
             end
         end
-
-        -- END CHANGE SCREEN
     end,
 
     draw = function(g)
@@ -139,23 +127,25 @@ scene_game = {
 
         g.bg:draw()
         g.player:draw()
-        foreach(
-            g.player_bullets, function(bullet)
-                bullet:draw()
-            end
-        )
 
-        foreach(
-            g.enemy_bullets, function(bullet)
-                bullet:draw()
-            end
-        )
+        for bullet in all(g.player_bullets) do
+            bullet:draw()
+        end
+
+        for bullet in all(g.enemy_bullets) do
+            bullet:draw()
+        end
 
         for enemy in all(g.enemies) do
             enemy:draw()
         end
 
-        scene_particals.draw(g.particals)
+        for part in all(g.particals) do
+            part:draw()
+            if not part.is_active then
+                del(g.particals, part)
+            end
+        end
 
         -- UI on the top of the screen
         rectfill(0, 0, g.score / 5, 4, 5)

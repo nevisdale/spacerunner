@@ -3,6 +3,7 @@ scene_game = {
         g.player = scene_player.new(vec2d.new(64, 64), 2, 3)
         g.player_bullets = {}
         g.enemies = {}
+        g.enemy_bullets = scene_enemy_bullets
         g.bg = scene_starfield.new()
         g.particals = {}
         g.score = 0
@@ -34,13 +35,6 @@ scene_game = {
             end)
         end
 
-        -- if there are many enemies bullets
-        if btn(4) then
-            player.spd = 1
-        else
-            player.spd = 2
-        end
-
         -- collision: enemies x player
         collutils.responsd_seq(
             g.enemies, player,
@@ -50,6 +44,20 @@ scene_game = {
                     local player_expl = scene_particals.new_explosion(expl_pos, 2)
                     add(g.particals, player_expl)
                     sfx(1)
+                end
+            end
+        )
+
+        -- collision: enemy bullets x player
+        collutils.responsd_seq(
+            g.enemy_bullets, player,
+            function(bullet, player)
+                if player:take_damage(1) then
+                    local expl_pos = player.pos:copy()
+                    local player_expl = scene_particals.new_explosion(expl_pos, 2)
+                    add(g.particals, player_expl)
+                    sfx(1)
+                    del(g.enemy_bullets, bullet)
                 end
             end
         )
@@ -86,6 +94,15 @@ scene_game = {
         end
 
         foreach(
+            g.enemy_bullets, function(bullet)
+                bullet:update()
+                if not bullet.is_active then
+                    del(g.enemy_bullets, bullet)
+                end
+            end
+        )
+
+        foreach(
             player_bullets, function(bullet)
                 bullet:update()
                 if not bullet.is_active then
@@ -117,12 +134,19 @@ scene_game = {
             collutils.show(g.player, 3)
             collutils.show_seq(g.player_bullets, 3)
             collutils.show_seq(g.enemies, 8)
+            collutils.show_seq(g.enemy_bullets, 14)
         end
 
         g.bg:draw()
         g.player:draw()
         foreach(
             g.player_bullets, function(bullet)
+                bullet:draw()
+            end
+        )
+
+        foreach(
+            g.enemy_bullets, function(bullet)
                 bullet:draw()
             end
         )

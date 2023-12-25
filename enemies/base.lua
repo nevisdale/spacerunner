@@ -1,3 +1,5 @@
+scene_enemy_bullets = {}
+
 scene_enemy_base = {
     new = function(pos, hp, anim)
         return {
@@ -10,7 +12,7 @@ scene_enemy_base = {
             anim = anim,
             w = 1,
             h = 1,
-
+            shake = 0,
 
             protec_update = function(enemy)
             end,
@@ -64,7 +66,16 @@ scene_enemy_base = {
                         pal(i, 7)
                     end
                 end
-                spr(self.anim:next(), self.pos.x, self.pos.y, self.w, self.h)
+
+                local posx = self.pos.x
+                local posy = self.pos.y
+
+                if self.shake > 0 then
+                    posx += sin(time() % 5 * 5)
+                    self.shake -= 1
+                end
+
+                spr(self.anim:next(), posx, posy, self.w, self.h)
                 pal()
             end
         }

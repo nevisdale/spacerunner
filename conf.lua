@@ -1,5 +1,5 @@
 conf = {
     start_screen = "start",
-    collision_shape = false,
+    collision_shape = true,
     start_level = 1
 }

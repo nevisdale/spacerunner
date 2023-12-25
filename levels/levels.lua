@@ -53,6 +53,8 @@ level_template = {
                                         need_to_add = true
                                         del(to_attac, valid_enemy)
                                     end
+                                else
+                                    need_to_add = true
                                 end
                             end
                         )

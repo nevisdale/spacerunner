@@ -104,7 +104,6 @@ scene_enemy.new_green = function(pos, target)
 
     local once = false
     local shake = 25
-
     enemy.attac_update = function(enemy)
         waiting_frames -= 1
         if waiting_frames == 0 then
@@ -119,10 +118,12 @@ scene_enemy.new_green = function(pos, target)
             enemy.shake = shake
             once = true
         end
-        if shake > 0 then
-            shake -= 1
+        if enemy.shake > 0 then
+            enemy.shake -= 1
             return
         end
+
+        once = false
 
         local bullet_pos = enemy.pos + vec2d.new(2, 2)
         local bullet_spd = enemy.player_pos - bullet_pos
